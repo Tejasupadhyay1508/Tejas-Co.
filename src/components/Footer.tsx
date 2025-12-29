@@ -1,0 +1,181 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Heart } from "lucide-react";
+import { SiLinkedin, SiGithub, SiX } from "react-icons/si";
+import { personalInfo } from "@/data/portfolioData";
+
+const socialLinks = [
+  {
+    name: "LinkedIn",
+    icon: SiLinkedin,
+    href: personalInfo.socials.linkedin,
+  },
+  {
+    name: "GitHub",
+    icon: SiGithub,
+    href: personalInfo.socials.github,
+  },
+  {
+    name: "X",
+    icon: SiX,
+    href: personalInfo.socials.x,
+  },
+];
+
+type QuickLink = {
+  name: string;
+  href: string;
+  type: "hash" | "route";
+};
+
+const quickLinks: QuickLink[] = [
+  { name: "Home", href: "#home", type: "hash" },
+  { name: "About", href: "/about", type: "route" },
+  { name: "Skills", href: "#skills", type: "hash" },
+  { name: "Projects", href: "#projects", type: "hash" },
+  { name: "Experience", href: "#experience", type: "hash" },
+  { name: "Contact", href: "#contact", type: "hash" },
+];
+
+export function Footer() {
+  const currentYear = new Date().getFullYear();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleHashNavigation = (href: string) => {
+    if (typeof window === "undefined") return;
+
+    if (pathname !== "/") {
+      const destination = href === "#home" ? "/" : `/${href}`;
+      router.push(destination);
+      return;
+    }
+
+    if (href === "#home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
+    <footer className="border-t border-border bg-card/50" data-testid="footer">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid md:grid-cols-3 gap-8 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.button
+              type="button"
+              onClick={() => handleHashNavigation("#home")}
+              className="text-xl font-bold text-foreground inline-flex mb-4"
+              animate={{
+                textShadow: [
+                  "0 0 10px rgba(59, 130, 246, 0), 0 0 20px rgba(59, 130, 246, 0)",
+                  "0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.5)",
+                  "0 0 10px rgba(59, 130, 246, 0), 0 0 20px rgba(59, 130, 246, 0)",
+                ],
+              }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                repeatType: "loop",
+                ease: "easeInOut",
+              }}
+              data-testid="link-footer-logo"
+            >
+              <span className="text-primary">&lt;</span>
+              Tejas
+              <span className="text-primary">/&gt;</span>
+            </motion.button>
+            <p className="text-muted-foreground text-sm max-w-xs">
+              {personalInfo.tagline}
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="md:text-center"
+          >
+            <h4 className="font-semibold text-foreground mb-4">Quick Links</h4>
+            <nav className="flex flex-wrap gap-x-6 gap-y-2 md:justify-center">
+              {quickLinks.map((link) =>
+                link.type === "route" ? (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="text-muted-foreground text-sm hover:text-primary transition-colors"
+                    data-testid={`link-footer-${link.name.toLowerCase()}`}
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <button
+                    key={link.name}
+                    onClick={() => handleHashNavigation(link.href)}
+                    className="text-muted-foreground text-sm hover:text-primary transition-colors"
+                    data-testid={`link-footer-${link.name.toLowerCase()}`}
+                  >
+                    {link.name}
+                  </button>
+                )
+              )}
+            </nav>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="md:text-right"
+          >
+            <h4 className="font-semibold text-foreground mb-4">Connect</h4>
+            <div className="flex gap-4 md:justify-end">
+              {socialLinks.map((social) => (
+                <motion.a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:shadow-lg hover:shadow-primary/30"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  data-testid={`link-social-${social.name.toLowerCase()}`}
+                >
+                  <social.icon className="w-5 h-5" />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-12 pt-8 border-t border-border text-center"
+        >
+          <p className="text-muted-foreground text-sm flex items-center justify-center gap-1" data-testid="text-copyright">
+            &copy; {currentYear} {personalInfo.name}. Made with{" "}
+            <Heart className="w-4 h-4 text-red-500 fill-red-500" /> in India
+          </p>
+        </motion.div>
+      </div>
+    </footer>
+  );
+}
