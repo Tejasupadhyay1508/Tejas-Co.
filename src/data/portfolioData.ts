@@ -61,7 +61,7 @@ export const personalInfo: PersonalInfo = {
   tagline: "Crafting seamless digital experiences through code and creativity.",
   
   resumeLink:
-    "https://drive.google.com/file/d/1mqZQjVaa2vAYsV0PV0rwR82HL_Gslpuh/view?usp=sharing",
+    "https://drive.google.com/file/d/1zY9cMW6xrBZE4R-PiufxGRfgqGAffYNG/view?usp=sharing",
   location: "India",
   // Updated contact email
   // When users submit the contact form, messages will be sent to this address (and to server EMAIL_TO if set)
@@ -158,6 +158,30 @@ export const projects: Project[] = [
       "/images/projects/crypto-3.png",
     ],
   },
+  {
+    id: "web-ide-ai",
+    title: "Web IDE with AI Assistant",
+    shortDescription: "Browser-based developer workspace with live sandbox and AI-powered code assistance.",
+    fullDescription: "An interactive, browser-based developer workspace featuring live sandbox previews, terminal access, and file synchronization using WebContainers. Includes a sophisticated AI assistant for real-time code reviews, bug-fix suggestions, and performance optimization.",
+    techStack: ["Next.js", "React", "TypeScript", "WebContainers", "Tailwind CSS", "Monaco Editor"],
+    features: [
+      "Live browser-based sandbox preview",
+      "Integrated terminal access and file synchronization",
+      "AI-powered code chat and review assistant",
+      "Contextual code suggestion cards and auto-bug fixing",
+      "Responsive UI with Monaco-style editor integration"
+    ],
+    githubUrl: "https://github.com/Tejasupadhyay1508/liveflow-IDE", 
+    liveUrl: "", 
+    gradient: "from-blue-600 via-indigo-600 to-purple-600",
+    bannerImage: "/images/projects/web-ide-banner.png", 
+    photos: [
+      "/images/projects/web-ide-1.png",
+      "/images/projects/web-ide-2.png",
+      "/images/projects/web-ide-3.png",
+      "/images/projects/web-ide-4.png",
+    ],
+},
 ];
 
 export const experiences: Experience[] = [

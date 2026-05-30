@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
+import emailjs from "@emailjs/browser";
 import {
   Form,
   FormControl,
@@ -32,6 +33,14 @@ export function Contact() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Initialize EmailJS
+  useEffect(() => {
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+    if (publicKey) {
+      emailjs.init(publicKey);
+    }
+  }, []);
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -45,27 +54,35 @@ export function Contact() {
     try {
       setIsSubmitting(true);
 
-      const subject = encodeURIComponent(`Portfolio enquiry from ${data.name}`);
-      const body = encodeURIComponent(
-        `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`
-      );
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 
-      const mailtoLink = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
-
-      if (typeof window !== "undefined") {
-        window.location.href = mailtoLink;
+      if (!serviceId || !templateId) {
+        throw new Error("EmailJS configuration is missing");
       }
 
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: data.name,
+          from_email: data.email,
+          to_email: personalInfo.email,
+          message: data.message,
+          reply_to: data.email,
+        }
+      );
+
       toast({
-        title: "Message ready!",
-        description: "Your email client should open with the message details.",
+        title: "Message sent successfully!",
+        description: "I'll get back to you as soon as possible.",
       });
       form.reset();
     } catch (error) {
-      console.error(error);
+      console.error("EmailJS error:", error);
       toast({
-        title: "Error",
-        description: "Unable to open your email client. Please try again.",
+        title: "Error sending message",
+        description: "Please try again or contact me directly at " + personalInfo.email,
         variant: "destructive",
       });
     } finally {
